@@ -1,0 +1,17 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="clr-namespace:TfsEventManager.Infrastructure">
+
+    <i:EnumToBooleanConverter x:Key="enumConverter" />
+
+    <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="Segoe UI,Tahoma,Verdana,Helvetica,Sans-Serif" />
+    </Style>
+
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Padding" Value="10,2,10,2" />
+    </Style>
+
+</ResourceDictionary>

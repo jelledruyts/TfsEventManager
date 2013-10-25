@@ -1,0 +1,98 @@
+﻿<Window x:Class="TfsEventManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TFS Event Manager"
+        Height="600" Width="800"
+        Icon="App.ico"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Team Project Collection URL" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Path=AvailableTeamProjectCollectionUrls}" Text="{Binding Path=TeamProjectCollectionUrl, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" Margin="5,0,0,0" />
+            </Grid>
+            <TabControl Grid.Row="1" Margin="0,5,0,0">
+                <TabItem Header="Event Subscriptions">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0">
+                            <Button Content="Get Event Subscriptions" Command="{Binding Path=GetAllEventSubscriptionsCommand}"/>
+                            <Button Margin="5,0,0,0" Content="Delete Selected Event Subscriptions" Command="{Binding Path=DeleteSelectedEventSubscriptionsCommand}" />
+                        </WrapPanel>
+                        <DataGrid Grid.Row="1" Margin="0,5,0,0" ItemsSource="{Binding Path=EventSubscriptions}" x:Name="eventSubscriptionsDataGrid" SelectionChanged="eventSubscriptionsDataGrid_SelectionChanged" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" />
+                                <DataGridTextColumn Header="Event Type" Binding="{Binding Path=EventType}" />
+                                <DataGridTextColumn Header="Delivery Address" Binding="{Binding Path=DeliveryPreference.Address}" />
+                                <DataGridTextColumn Header="Delivery Schedule" Binding="{Binding Path=DeliveryPreference.Schedule}" />
+                                <DataGridTextColumn Header="Delivery Type" Binding="{Binding Path=DeliveryPreference.Type}" />
+                                <DataGridTextColumn Header="Tag" Binding="{Binding Path=Tag}" />
+                                <DataGridTextColumn Header="Condition" Binding="{Binding Path=ConditionString}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Event Processing">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <WrapPanel Grid.Row="0">
+                            <Button Content="Get Event Job History" Command="{Binding Path=GetEventJobHistoryCommand}" />
+                            <CheckBox Content="Hide Succeeded Entries" IsChecked="{Binding Path=HideSucceededEventJobHistoryEntries}" Margin="5,0,0,0" VerticalAlignment="Center" />
+                        </WrapPanel>
+                        <DataGrid Grid.Row="1" Margin="0,5,0,0" ItemsSource="{Binding Path=EventJobHistoryEntries}" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Queue Time" Binding="{Binding Path=QueueTime}" />
+                                <DataGridTextColumn Header="Start Time" Binding="{Binding Path=ExecutionStartTime}" />
+                                <DataGridTextColumn Header="End Time" Binding="{Binding Path=EndTime}" />
+                                <DataGridTextColumn Header="Result" Binding="{Binding Path=Result}" />
+                                <DataGridTextColumn Header="Message" Binding="{Binding Path=ResultMessage}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Log Level">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" TextWrapping="Wrap">Change the log level to Detailed to troubleshoot event processing failures. This will result in more detailed information in the event job history table. Do not forget to change it back to Normal when you are done troubleshooting.</TextBlock>
+                        <WrapPanel Grid.Row="1" Margin="0,5,0,0">
+                            <Button Content="Get Log Level" Command="{Binding Path=GetNotificationJobLogLevelCommand}" />
+                            <Button Margin="5,0,0,0" Content="Update Log Level" Command="{Binding Path=SetNotificationJobLogLevelCommand}" />
+                        </WrapPanel>
+                        <WrapPanel Grid.Row="2" Margin="0,5,0,0">
+                            <RadioButton Content="Normal" IsChecked="{Binding Path=NotificationJobLogLevel, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Normal}" VerticalAlignment="Center" />
+                            <RadioButton Margin="5,0,0,0" Content="Detailed" IsChecked="{Binding Path=NotificationJobLogLevel, Mode=TwoWay, Converter={StaticResource enumConverter}, ConverterParameter=Detailed}" VerticalAlignment="Center" />
+                        </WrapPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+        <StatusBar Grid.Row="1" Margin="0,5,0,0">
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="{Binding Path=StatusColorForeground}" Background="{Binding Path=StatusColorBackground}">
+                <TextBlock Text="{Binding Path=StatusText}" ToolTip="{Binding Path=StatusDetail}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Stretch" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
